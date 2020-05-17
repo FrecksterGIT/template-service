@@ -1,0 +1,111 @@
+name: Node release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  allow-release:
+    runs-on: ubuntu-latest
+    outputs:
+      run_rest_jobs: ${{ steps.set_output.outputs.run_jobs }}
+    steps:
+      - name: Evaluate pusher
+        id: set_output
+        run: |
+          if [[ ${{ github.event.pusher.name }} == "dependabot-preview[bot]" ]]; then
+            echo "::set-output name=run_jobs::false"
+          elif [[ ${{ github.event.pusher.name }} == "dependabot[bot]" ]]; then
+            echo "::set-output name=run_jobs::false"
+          elif [[ ${{ github.event.pusher.name }} == "renovate[bot]" ]]; then
+            echo "::set-output name=run_jobs::false"
+          elif [[ ${{ github.event.pusher.name }} == "Renovate Bot" ]]; then
+            echo "::set-output name=run_jobs::false"
+          else
+            echo "::set-output name=run_jobs::true"
+          fi
+
+  build:
+    needs: [allow-release]
+    if: needs.allow-release.outputs.run_rest_jobs == 'true'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache npm cache files
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - name: install dependencies
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TECH_USER_AUTH_TOKEN }}" >> ~/.npmrc
+          npm ci
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
+      - name: tag new version
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          npm run release
+          git push --follow-tags
+          export LAST_TAG=$(git describe --abbrev=0)
+          echo "::set-env name=EXPORT_TAG_NAME::${LAST_TAG}"
+
+      - name: build
+        run: |
+          echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//")
+          npm run build
+
+      - name: publish new package
+        run: |
+          npm publish
+          zip -r dist.zip dist/ package.json
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.EXPORT_TAG_NAME }}
+          release_name: ${{ env.EXPORT_TAG_NAME }}
+          bodyFile: CHANGELOG.md
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist.zip
+          asset_name: ${{ env.REPOSITORY_NAME }}-${{ env.EXPORT_TAG_NAME }}.zip
+          asset_content_type: application/zip
+
+      - name: Rebase develop
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          git checkout develop
+          git pull
+          git rebase master
+          git push --force

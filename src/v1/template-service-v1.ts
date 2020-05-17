@@ -1,7 +1,7 @@
 import {FeatureServiceBinding} from '@feature-hub/core';
-import {Callback, FeatureServiceImplementation, Registry} from '@freckstergit/feature-service-definition';
+import {Callback, FeatureServiceImplementation, Registry} from '@das-buro-am-draht/feature-hub-tools';
 
-import {Options} from '../feature-service';
+import {TemplateServiceOptions} from '../feature-service';
 
 export interface ServicePayload {
   noEmptyInterfaces?: boolean;
@@ -13,7 +13,7 @@ export interface TemplateServiceV1 {
   update: Callback<ServicePayload>;
 }
 
-export const TemplateServiceV1Implementation: FeatureServiceImplementation<TemplateServiceV1, Options> = () => {
+export const TemplateServiceV1Implementation: FeatureServiceImplementation<TemplateServiceV1, TemplateServiceOptions> = () => {
   const registry = Registry<ServicePayload>();
 
   return {

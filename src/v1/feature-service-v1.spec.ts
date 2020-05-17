@@ -1,5 +1,5 @@
 import {FeatureServiceBinding} from '@feature-hub/core';
-import {FeatureServiceInterface} from '@freckstergit/feature-service-definition';
+import {FeatureServiceInterface} from '@das-buro-am-draht/feature-hub-tools';
 
 import {TemplateServiceV1, TemplateServiceV1Implementation} from './template-service-v1';
 
@@ -8,7 +8,7 @@ let instance: FeatureServiceBinding<TemplateServiceV1>;
 let featureService: TemplateServiceV1;
 
 beforeEach(() => {
-  implementation = TemplateServiceV1Implementation({}, {featureServices: {}});
+  implementation = TemplateServiceV1Implementation(undefined, {featureServices: {}});
   instance = implementation.create('test');
   featureService = instance.featureService;
 });
@@ -22,8 +22,8 @@ test('instance should provide an unbind method', () => {
 });
 
 test('the created instance', () => {
-  expect(typeof featureService.registerCallback).toBe('function')
-  expect(typeof featureService.unregisterCallback).toBe('function')
+  expect(typeof featureService.registerCallback).toBe('function');
+  expect(typeof featureService.unregisterCallback).toBe('function');
   expect(typeof featureService.update).toBe('function');
 });
 

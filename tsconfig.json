@@ -2,12 +2,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "commonjs",
-    "target": "ES6",
     "declaration": true,
+    "declarationDir": "./dist",
     "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
-    "resolveJsonModule": true
+    "jsx": "react"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
