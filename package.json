@@ -1,0 +1,57 @@
+{
+  "name": "template-service",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/feature-service.d.ts",
+  "files": [
+    "dist"
+  ],
+  "directories": {
+    "lib": "dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrecksterGIT/template-service.git"
+  },
+  "scripts": {
+    "build": "rimraf dist && webpack --mode production",
+    "clean": "rimraf dist",
+    "develop": "webpack --watch --mode development",
+    "lint": "eslint src/**/*.ts",
+    "release": "standard-version",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@feature-hub/core": "2.4.1"
+  },
+  "devDependencies": {
+    "@freckstergit/feature-service-definition": "^1.1.2",
+    "@types/jest": "^25.2.2",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "lint-staged": "^10.2.2",
+    "rimraf": "3.0.2",
+    "standard-version": "8.0.0",
+    "ts-jest": "^26.0.0",
+    "ts-loader": "7.0.4",
+    "typescript": "3.9.2",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.ts": "eslint --cache --fix"
+  }
+}
