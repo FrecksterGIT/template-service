@@ -4,6 +4,7 @@ import {
   FeatureServiceDefinition,
   FeatureServiceInterface,
 } from '@freckstergit/feature-service-definition';
+
 import {TemplateServiceV1, TemplateServiceV1Implementation} from './v1/template-service-v1';
 
 type ServiceVersions = TemplateServiceV1; // V1 | V2 ...

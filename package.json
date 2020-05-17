@@ -28,11 +28,12 @@
     "@feature-hub/core": "2.4.1"
   },
   "devDependencies": {
-    "@freckstergit/feature-service-definition": "^1.1.2",
+    "@freckstergit/feature-service-definition": "^1.2.1",
     "@types/jest": "^25.2.2",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "eslint": "^7.0.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-typescript": "^0.14.0",
     "husky": "^4.2.5",
     "jest": "^26.0.1",

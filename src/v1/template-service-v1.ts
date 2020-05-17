@@ -1,61 +1,33 @@
 import {FeatureServiceBinding} from '@feature-hub/core';
-import {FeatureServiceImplementation} from '@freckstergit/feature-service-definition';
+import {Callback, FeatureServiceImplementation, Registry} from '@freckstergit/feature-service-definition';
+
 import {Options} from '../feature-service';
 
-export type Callback<TPayload> = (payload: TPayload) => void;
-
-export interface TemplateServicePayload {
+export interface ServicePayload {
   noEmptyInterfaces?: boolean;
 }
 
 export interface TemplateServiceV1 {
-  registerCallback: (callback: Callback<TemplateServicePayload>) => void;
+  registerCallback: (callback: Callback<ServicePayload>) => void;
   unregisterCallback: () => void;
-  update: Callback<TemplateServicePayload>;
+  update: Callback<ServicePayload>;
 }
 
 export const TemplateServiceV1Implementation: FeatureServiceImplementation<TemplateServiceV1, Options> = () => {
-  const callbacks = new Map<string, Callback<TemplateServicePayload>>();
-  let payload: TemplateServicePayload = {};
-
-  const create = (consumerId: string): FeatureServiceBinding<TemplateServiceV1> => {
-
-    const registerCallback = (callback: Callback<TemplateServicePayload>): void => {
-      if (typeof callback !== 'function') {
-        throw new Error(`Bad parameter 'callback': Expect function but got ${typeof callback}.`);
-      }
-
-      if (typeof callbacks.get(consumerId) === 'function') {
-        throw new Error(`A callback is already defined for consumer: ${consumerId}.`);
-      }
-
-      callbacks.set(consumerId, callback);
-      callback(payload);
-    };
-
-    const unregisterCallback = (): void => {
-      callbacks.delete(consumerId);
-    };
-
-    const update = (data: TemplateServicePayload): void => {
-      payload = data;
-
-      callbacks.forEach((callback) => {
-        callback(payload);
-      });
-    };
-
-    return {
-      featureService: {
-        registerCallback,
-        unregisterCallback,
-        update,
-      },
-      unbind: unregisterCallback,
-    };
-  };
+  const registry = Registry<ServicePayload>();
 
   return {
-    create,
+    create: (consumerId: string): FeatureServiceBinding<TemplateServiceV1> => {
+      const subscription = registry.subscribe(consumerId);
+
+      return {
+        featureService: {
+          registerCallback: subscription.register,
+          unregisterCallback: subscription.unregister,
+          update: registry.update,
+        },
+        unbind: subscription.unregister,
+      };
+    },
   };
 };

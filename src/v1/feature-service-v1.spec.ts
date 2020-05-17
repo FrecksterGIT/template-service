@@ -1,5 +1,6 @@
 import {FeatureServiceBinding} from '@feature-hub/core';
 import {FeatureServiceInterface} from '@freckstergit/feature-service-definition';
+
 import {TemplateServiceV1, TemplateServiceV1Implementation} from './template-service-v1';
 
 let implementation: FeatureServiceInterface<TemplateServiceV1>;
@@ -7,13 +8,12 @@ let instance: FeatureServiceBinding<TemplateServiceV1>;
 let featureService: TemplateServiceV1;
 
 beforeEach(() => {
-  const implementation = TemplateServiceV1Implementation({}, {featureServices: {}});
+  implementation = TemplateServiceV1Implementation({}, {featureServices: {}});
   instance = implementation.create('test');
   featureService = instance.featureService;
 });
 
 test('Implementation should have a create method', () => {
-  expect(true).toBeTruthy();
   expect(typeof implementation.create).toBe('function');
 });
 
@@ -22,15 +22,15 @@ test('instance should provide an unbind method', () => {
 });
 
 test('the created instance', () => {
-  expect(featureService.registerCallback).toBeDefined();
-  expect(featureService.unregisterCallback).toBeDefined();
-  expect(featureService.update).toBeDefined();
+  expect(typeof featureService.registerCallback).toBe('function')
+  expect(typeof featureService.unregisterCallback).toBe('function')
+  expect(typeof featureService.update).toBe('function');
 });
 
 test('registering should call the callback', () => {
   const callback = jest.fn();
   featureService.registerCallback(callback);
-  expect(callback).toHaveBeenCalled();
+  expect(callback).toHaveBeenCalledTimes(1);
 });
 
 test('registering and updating should call the callback', () => {
