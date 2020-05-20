@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "commonjs",
-    "declaration": true,
-    "declarationDir": "./dist",
+    "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
