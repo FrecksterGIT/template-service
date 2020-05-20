@@ -19,7 +19,7 @@
   "scripts": {
     "build": "rimraf dist && webpack --mode production",
     "develop": "rimraf dist && webpack --watch --mode development",
-    "lint": "eslint src/**/*.ts?",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "release": "standard-version",
     "release:test": "npm run build && npm pack",
     "test": "jest --coverage"
