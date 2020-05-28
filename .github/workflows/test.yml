@@ -30,12 +30,20 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
 
-      - name: Setup npm authentication
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.TECH_USER_AUTH_TOKEN }}" >> ~/.npmrc
-
-      - name: npm install, build, and test
+      - name: npm install
         run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TECH_USER_AUTH_TOKEN }}" >> ~/.npmrc
           npm ci
-          npm run build
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
+      - name: lint
+        run: |
           npm run lint
+
+      - name: build
+        run: |
+          npm run build
+
+      - name: test
+        run: |
           npm run test
