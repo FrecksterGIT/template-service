@@ -5,7 +5,7 @@
   "author": "",
   "license": "ISC",
   "main": "dist/index.js",
-  "types": "dist/feature-service.d.ts",
+  "types": "dist/template-service.d.ts",
   "files": [
     "dist"
   ],
@@ -20,7 +20,7 @@
     "build": "rimraf dist && webpack --mode production",
     "develop": "rimraf dist && webpack --watch --mode development",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "postbuild": "dts-bundle-generator -o ./dist/feature-service.d.ts ./src/feature-service.ts",
+    "postbuild": "dts-bundle-generator -o ./dist/template-service.d.ts ./src/template-service.ts",
     "release": "standard-version",
     "release:test": "npm run build && npm pack",
     "test": "jest --coverage"
@@ -40,7 +40,7 @@
     "eslint-plugin-import": "^2.20.2",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
-    "lint-staged": "^10.2.6",
+    "lint-staged": "^10.2.7",
     "rimraf": "3.0.2",
     "standard-version": "8.0.0",
     "ts-jest": "^26.0.0",

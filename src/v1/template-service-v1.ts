@@ -1,7 +1,7 @@
 import {FeatureServiceBinding} from '@feature-hub/core';
 import {Callback, FeatureServiceImplementation, Registry} from '@das-buro-am-draht/feature-hub-tools';
 
-import {TemplateServiceOptions} from '../feature-service';
+import {TemplateServiceOptions} from '../template-service';
 
 export interface ServicePayload {
   noEmptyInterfaces?: boolean;

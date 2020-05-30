@@ -4,7 +4,7 @@ const path = require('path');
 
 const serviceConfig = {
   devtool: 'source-map',
-  entry: path.join(__dirname, './src/feature-service.ts'),
+  entry: path.join(__dirname, './src/template-service.ts'),
   externals: {
     '@feature-hub/core': '@feature-hub/core',
   },

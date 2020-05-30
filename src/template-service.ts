@@ -25,6 +25,6 @@ const definition: FeatureServiceDefinition<TemplateServiceV1, TemplateServiceOpt
   },
 };
 
-const defineTemplateFeatureService = defineFeatureService<TemplateServiceV1, Service, TemplateServiceOptions>(definition);
+const defineTemplateService = defineFeatureService<TemplateServiceV1, Service, TemplateServiceOptions>(definition);
 
-export {defineTemplateFeatureService, TemplateServiceV1, TemplateServiceOptions};
+export {defineTemplateService, TemplateServiceV1, TemplateServiceOptions};
