@@ -1,4 +1,4 @@
-import {defineTemplateService} from './feature-service';
+import {defineTemplateService} from './template-service';
 
 test('Feature Service Definition should id and create method', () => {
   const featureService = defineTemplateService();
