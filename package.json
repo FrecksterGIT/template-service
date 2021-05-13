@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@das-buro-am-draht/feature-hub-tools": "^0.0.5",
     "@types/jest": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
